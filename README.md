@@ -6,7 +6,7 @@ AlgoLens is a zero-friction DSA visualizer that connects you to real LeetCode pr
 
 ## Live Demo
 
-[Coming soon — deploying to Cloudflare Pages]
+[https://algolens-dwb.pages.dev]
 
 ## Features
 
