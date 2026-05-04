@@ -5,8 +5,8 @@ const search = {
         const searchInput = document.getElementById('problem-search');
         if (!searchInput) return;
 
-        const debouncedSearch = api.debounce((e) => {
-            onSearch(e.target.value);
+        const debouncedSearch = api.debounce(() => {
+            onSearch(searchInput.value.trim());
         }, 300);
 
         searchInput.addEventListener('input', debouncedSearch);

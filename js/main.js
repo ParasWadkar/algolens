@@ -4,6 +4,30 @@ import theme from './theme.js';
 
 const problemGrid = document.getElementById('problem-grid');
 
+function escapeHtml(value) {
+    return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function stripHtml(value) {
+    return String(value || '').replace(/<[^>]*>/g, ' ');
+}
+
+function getSummary(problem) {
+    const sourceText = stripHtml(problem.content || problem.titleSlug || '');
+    const compactText = sourceText.replace(/\s+/g, ' ').trim();
+
+    if (!compactText) {
+        return 'Problem details available in the visualizer.';
+    }
+
+    return compactText.length > 140 ? `${compactText.slice(0, 137)}...` : compactText;
+}
+
 function createProblemCard(problem) {
     const card = document.createElement('div');
     card.className = 'problem-card';
@@ -14,19 +38,20 @@ function createProblemCard(problem) {
     card.dataset.difficulty = problem.difficulty;
     card.dataset.tags = JSON.stringify(problem.topicTags);
 
-    const tagNames = problem.topicTags.map(tag => tag.name);
+    const tagNames = Array.isArray(problem.topicTags) ? problem.topicTags.map(tag => tag.name).filter(Boolean) : [];
     const primaryTags = tagNames.slice(0, 3);
     const extraTags = Math.max(tagNames.length - primaryTags.length, 0);
+    const summary = getSummary(problem);
 
     card.innerHTML = `
         <div>
             <div class="problem-card-header">
-                <h3 class="problem-title">${problem.title}</h3>
-                <span class="badge ${problem.difficulty.toLowerCase()}">${problem.difficulty}</span>
+                <h3 class="problem-title">${escapeHtml(problem.title)}</h3>
+                <span class="badge ${escapeHtml(problem.difficulty.toLowerCase())}">${escapeHtml(problem.difficulty)}</span>
             </div>
-            <p class="problem-summary">Slug: ${problem.titleSlug}</p>
+            <p class="problem-summary">${escapeHtml(summary)}</p>
             <div class="tag-list">
-                ${primaryTags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                ${primaryTags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
                 ${extraTags > 0 ? `<span class="tag">+${extraTags}</span>` : ''}
             </div>
             <span class="problem-link">
@@ -40,10 +65,10 @@ function createProblemCard(problem) {
     card.tabIndex = 0;
     card.addEventListener('click', () => {
         const params = new URLSearchParams({
-            title: problem.title,
-            slug: problem.titleSlug,
-            difficulty: problem.difficulty,
-            tags: JSON.stringify(problem.topicTags)
+            title: problem.title || '',
+            slug: problem.titleSlug || '',
+            difficulty: problem.difficulty || '',
+            tags: JSON.stringify(problem.topicTags || [])
         });
         window.location.href = `visualizer.html?${params.toString()}`;
     });

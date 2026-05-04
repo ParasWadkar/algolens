@@ -1,95 +1,150 @@
-const LEETCODE_API_ENDPOINT = 'https://leetcode.com/graphql';
+const API_BASE_URL = 'https://alfa-leetcode-api.onrender.com';
+const CACHE_PREFIX = 'algolens_';
+const CACHE_TTL_MS = 60 * 60 * 1000;
+const DEFAULT_LIMIT = 20;
+const DEFAULT_SKIP = 0;
 
-const api = {
-    cache: new Map(),
+function buildCacheKey(path, params = {}) {
+    const sortedParams = Object.keys(params)
+        .sort()
+        .map((key) => `${key}=${params[key]}`)
+        .join('&');
 
-    async fetchProblems(query = "") {
-        const cacheKey = `algolens_cache_${query}`;
-        const cachedData = localStorage.getItem(cacheKey);
-        
-        if (cachedData) {
-            const { timestamp, data } = JSON.parse(cachedData);
-            // Cache for 1 hour
-            if (Date.now() - timestamp < 3600000) {
-                return data;
-            }
-        }
+    return `${CACHE_PREFIX}${path}${sortedParams ? `?${sortedParams}` : ''}`;
+}
 
-        const graphqlQuery = {
-            query: `
-                query problemsetQuestionList($categorySlug: String, $limit: Int, $skip: Int, $filters: QuestionListFilterInput) {
-                    problemsetQuestionList: questionList(
-                        categorySlug: $categorySlug
-                        limit: $limit
-                        skip: $skip
-                        filters: $filters
-                    ) {
-                        total: totalNum
-                        questions: data {
-                            acRate
-                            difficulty
-                            freqBar
-                            questionId
-                            frontendQuestionId: questionFrontendId
-                            isFavor
-                            paidOnly: isPaidOnly
-                            status
-                            title
-                            titleSlug
-                            topicTags {
-                                name
-                                id
-                                slug
-                            }
-                            hasSolution
-                            hasVideoSolution
-                        }
-                    }
-                }
-            `,
-            variables: {
-                categorySlug: "",
-                skip: 0,
-                limit: 20,
-                filters: { search: query }
-            }
-        };
+function getCachedData(cacheKey) {
+    const cachedValue = localStorage.getItem(cacheKey);
 
-        try {
-            const response = await fetch(LEETCODE_API_ENDPOINT, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(graphqlQuery),
-            });
-
-            const data = await response.json();
-            const problems = data.data.problemsetQuestionList.questions;
-            
-            localStorage.setItem(cacheKey, JSON.stringify({
-                timestamp: Date.now(),
-                data: problems
-            }));
-            
-            return problems;
-        } catch (error) {
-            console.error('Error fetching problems:', error);
-            return [];
-        }
-    },
-
-    debounce(func, wait) {
-        let timeout;
-        return function executedFunction(...args) {
-            const later = () => {
-                clearTimeout(timeout);
-                func(...args);
-            };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-        };
+    if (!cachedValue) {
+        return null;
     }
-};
 
-export default api;
+    try {
+        const parsed = JSON.parse(cachedValue);
+        if (Date.now() - parsed.timestamp < CACHE_TTL_MS) {
+            return parsed.data;
+        }
+    } catch (error) {
+        console.warn('Ignoring malformed cache entry:', error);
+    }
+
+    localStorage.removeItem(cacheKey);
+    return null;
+}
+
+function setCachedData(cacheKey, data) {
+    localStorage.setItem(cacheKey, JSON.stringify({
+        timestamp: Date.now(),
+        data,
+    }));
+}
+
+function normalizeProblem(problem) {
+    return {
+        titleSlug: problem.titleSlug || '',
+        title: problem.title || '',
+        difficulty: problem.difficulty || 'Unknown',
+        topicTags: Array.isArray(problem.topicTags) ? problem.topicTags : [],
+        content: problem.content || '',
+    };
+}
+
+function extractProblemList(payload) {
+    const list = payload?.problemsetQuestionList;
+
+    if (!Array.isArray(list)) {
+        return [];
+    }
+
+    return list.map(normalizeProblem);
+}
+
+async function fetchJson(url) {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`);
+    }
+
+    return response.json();
+}
+
+async function fetchProblems(query = '') {
+    const normalizedQuery = query.trim();
+    const cacheKey = buildCacheKey('problems', normalizedQuery ? { query: normalizedQuery } : { limit: DEFAULT_LIMIT, skip: DEFAULT_SKIP });
+    const cachedData = getCachedData(cacheKey);
+
+    if (cachedData) {
+        return cachedData;
+    }
+
+    const url = normalizedQuery
+        ? `${API_BASE_URL}/problems?limit=${DEFAULT_LIMIT}&skip=${DEFAULT_SKIP}`
+        : `${API_BASE_URL}/problems?limit=${DEFAULT_LIMIT}&skip=${DEFAULT_SKIP}`;
+
+    try {
+        const data = await fetchJson(url);
+        const problems = extractProblemList(data);
+        const filteredProblems = normalizedQuery
+            ? problems.filter((problem) => {
+                const haystack = [problem.title, problem.titleSlug, problem.difficulty, ...(problem.topicTags || []).map((tag) => tag.name)]
+                    .join(' ')
+                    .toLowerCase();
+                return haystack.includes(normalizedQuery.toLowerCase());
+            })
+            : problems;
+
+        setCachedData(cacheKey, filteredProblems);
+        return filteredProblems;
+    } catch (error) {
+        console.error('Error fetching problems:', error);
+        return [];
+    }
+}
+
+async function fetchProblemBySlug(slug) {
+    if (!slug) {
+        return null;
+    }
+
+    const normalizedSlug = slug.trim();
+    const cacheKey = buildCacheKey('problem', { titleSlug: normalizedSlug });
+    const cachedData = getCachedData(cacheKey);
+
+    if (cachedData) {
+        return cachedData;
+    }
+
+    try {
+        const data = await fetchJson(`${API_BASE_URL}/problems?titleSlug=${encodeURIComponent(normalizedSlug)}`);
+        const [problem] = extractProblemList(data);
+        if (problem) {
+            setCachedData(cacheKey, problem);
+        }
+        return problem || null;
+    } catch (error) {
+        console.error('Error fetching problem:', error);
+        return null;
+    }
+}
+
+function debounce(func, wait) {
+    let timeout;
+
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+export default {
+    fetchProblems,
+    fetchProblemBySlug,
+    debounce,
+};
