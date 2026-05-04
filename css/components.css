@@ -35,11 +35,12 @@
     background: var(--card-bg);
     border: 1px solid var(--border-color);
     border-radius: 1rem;
-    padding: clamp(1rem, 4vw, 1.5rem);
+    padding: clamp(0.8rem, 2.5vw, 1.1rem);
     transition: transform 0.2s, border-color 0.2s;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 0.6rem;
     cursor: pointer;
 }
 
@@ -53,18 +54,28 @@
     align-items: flex-start;
     justify-content: space-between;
     gap: clamp(0.5rem, 2vw, 1rem);
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.35rem;
     flex-wrap: wrap;
+}
+
+.problem-card-header .problem-title {
+    flex: 1 1 auto;
+    min-width: 0;
 }
 
 .problem-summary {
     color: var(--text-muted);
     font-size: clamp(0.85rem, 2vw, 0.92rem);
-    margin-bottom: 1rem;
+    margin-bottom: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: calc(1.15em * 3);
 }
 
 .problem-link {
-    margin-top: 1rem;
+    margin-top: auto;
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
@@ -95,7 +106,7 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .badge {
@@ -172,5 +183,23 @@
     .btn {
         padding: 0.4rem 0.6rem;
         font-size: clamp(0.75rem, 1.8vw, 0.85rem);
+    }
+}
+
+@media (min-width: 1025px) {
+    .problem-card {
+        padding: 0.85rem 1rem;
+        max-height: 240px;
+        overflow: hidden;
+    }
+
+    .problem-summary {
+        -webkit-line-clamp: 2;
+        min-height: calc(1.15em * 2);
+    }
+
+    .problem-title {
+        line-height: 1.15;
+        margin-bottom: 0.25rem;
     }
 }

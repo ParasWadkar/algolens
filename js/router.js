@@ -12,6 +12,14 @@ function showLoadingSpinner(canvasId = 'visualizer-canvas') {
     `;
 }
 
+function hideLoadingSpinner(canvasId = 'visualizer-canvas') {
+    const canvas = document.getElementById(canvasId);
+    const spinner = canvas?.querySelector('.spinner-container');
+    if (spinner) {
+        spinner.remove();
+    }
+}
+
 function showError(message, details = '', canvasId = 'visualizer-canvas') {
     const canvas = document.getElementById(canvasId);
     canvas.innerHTML = `
@@ -61,6 +69,7 @@ async function initVisualizer() {
             // Initialize visualizer with error handling
             try {
                 visualizer.init('visualizer-canvas', { slug, title, difficulty, tags });
+                hideLoadingSpinner('visualizer-canvas');
             } catch (initErr) {
                 console.error('Visualizer initialization error:', initErr);
                 showError(
