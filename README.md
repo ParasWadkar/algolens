@@ -1,52 +1,94 @@
 # AlgoLens
 
-AlgoLens is a Data Structures and Algorithms (DSA) visualizer web app that allows users to find LeetCode problems and visualize their solutions step-by-step.
+> Visualize LeetCode problems step-by-step — no setup, no login, just clarity.
+
+AlgoLens is a zero-friction DSA visualizer that connects you to real LeetCode problems and animates their solutions in real time. Search by name, tag, or difficulty; the app detects the algorithm type and renders an interactive step-by-step walkthrough. Built for developers who want to understand algorithms, not memorize solutions.
+
+## Live Demo
+
+[Coming soon — deploying to Cloudflare Pages]
 
 ## Features
-- **LeetCode Integration:** Search for problems by name, tag, or difficulty using LeetCode's GraphQL API.
-- **Dynamic Visualizers:** Automatically detects the problem category and loads the appropriate D3.js visualizer (Array, Tree, Graph, Linked List, Matrix).
-- **Playback Controls:** Play, pause, and step through algorithm executions with adjustable speed.
-- **Dark Mode:** Sleek dark mode interface designed for developers.
-- **Mobile Responsive:** Fully functional on mobile and desktop devices.
 
-## Folder Structure
+- **Search LeetCode problems** by name, tag, or difficulty
+- **Auto-detects algorithm type** from problem tags
+- **Step-by-step animated visualizations** (array, tree)
+- **Play / pause / speed controls** for playback
+- **Dark & light mode** with persistence
+- **Fully mobile responsive** (320px–768px tested)
+- **No backend** — runs entirely in the browser
+- **localStorage caching** for instant repeat loads
+
+## Visualizers
+
+| Type | Algorithms | Status |
+|------|-----------|--------|
+| Array | Linear scan, two pointers, sliding window, binary search, bubble sort | ✅ Live |
+| Tree | Inorder, preorder, BFS level-order | ✅ Live |
+| Graph | BFS, DFS | 🔜 Coming soon |
+| Linked List | Traversal, reversal | 🔜 Coming soon |
+| Matrix | BFS flood fill, DFS path | 🔜 Coming soon |
+
+## Tech Stack
+
+| Layer | Choice |
+|-------|--------|
+| Frontend | Vanilla HTML, CSS, JavaScript |
+| Visualizations | D3.js (CDN) |
+| API | [alfa-leetcode-api.onrender.com](https://github.com/alfaArghya/leetcode-api) |
+| Caching | localStorage |
+| Hosting | Cloudflare Pages |
+
+## Getting Started
+
+### Run Locally
+
+```bash
+git clone https://github.com/ParasWadkar/algolens.git
+cd algolens
+python -m http.server 8000
+```
+
+Then open [http://localhost:8000](http://localhost:8000) in your browser.
+
+**No installation, no dependencies.** Just a Python HTTP server and you're done.
+
+## Project Structure
+
 ```
 algolens/
-├── index.html          # Main landing page with search
-├── visualizer.html     # Problem visualization page
-├── css/                # Stylesheets
-│   ├── base.css        # Resets and variables
-│   ├── layout.css      # Grid and flexbox layouts
-│   ├── components.css  # UI components (cards, buttons, search)
-│   └── visualizer.css  # Visualizer-specific styles
-├── js/                 # JavaScript logic
-│   ├── api.js          # LeetCode API service
-│   ├── router.js       # Navigation and URL management
-│   ├── search.js       # Search bar logic
-│   ├── detector.js     # Category detection logic
-│   ├── main.js         # Entry point for index.html
-│   └── visualizers/    # D3.js visualizer implementations
-│       ├── array.js
-│       ├── tree.js
-│       ├── graph.js
-│       ├── linkedlist.js
-│       └── matrix.js
-├── assets/             # Static assets (images, icons)
-├── .gitignore          # Git ignore rules
-└── README.md           # Project documentation
+├── index.html              # Homepage with search & problem grid
+├── visualizer.html         # Single-problem visualization page
+├── GEMINI.md              # AI-generated project notes
+├── css/
+│   ├── base.css           # CSS variables, animations, universal touch targets
+│   ├── layout.css         # Container, header, responsive grid (3-2-1 cols)
+│   ├── components.css     # Cards, badges, buttons, search, tags
+│   └── visualizer.css     # Canvas area, side panel, controls, responsive breakpoints
+├── js/
+│   ├── api.js             # Fetch & cache problem data (60-min TTL)
+│   ├── main.js            # Homepage: render cards, wire search, show skeletons/errors
+│   ├── search.js          # Debounced search input handler
+│   ├── router.js          # Parse URL params, load problem, initialize visualizer
+│   ├── detector.js        # Map problem tags to visualizer category
+│   ├── theme.js           # Dark/light theme toggle with localStorage persistence
+│   └── visualizers/       # Algorithm-specific D3.js implementations
+│       ├── array.js       # Generic array visualizer with algo type detection
+│       ├── tree.js        # Binary tree with traversal animations (inorder/preorder/level-order)
+│       ├── graph.js       # Placeholder for graph traversal (BFS/DFS)
+│       ├── linkedlist.js  # Placeholder for linked list operations
+│       └── matrix.js      # Placeholder for matrix algorithms
+└── README.md              # This file
 ```
 
-## How to Run
-Since this project uses vanilla HTML/CSS/JS with no build tools, you can run it using any static file server.
+## How It Works
 
-1. **Live Server (VS Code):** Right-click `index.html` and select "Open with Live Server".
-2. **Python:** Run `python -m http.server` in the root directory.
-3. **Node.js:** Run `npx serve` in the root directory.
+When you search for a problem, AlgoLens fetches the full problem description from the REST API, parses example inputs from the HTML content, and caches it for 60 minutes. The detector analyzes problem tags (e.g., "array", "tree", "binary search") to select the appropriate visualizer module. The visualizer generates a sequence of steps by parsing the example, detects the algorithm subtype (e.g., two-pointer vs. sliding window for arrays), renders each step with D3.js, and lets you animate through with play/pause/speed controls. All data stays in localStorage — reload and it's instant.
 
-Open your browser and navigate to `http://localhost:5500` (or the port provided by your server).
+## Related Projects
 
-## Technologies Used
-- HTML5 & CSS3
-- Vanilla JavaScript (ES6+)
-- [D3.js](https://d3js.org/) for data visualizations
-- LeetCode GraphQL API
+- [FormBridge2-Tally](https://github.com/ParasWadkar/FormBridge2-Tally) by [@ParasWadkar](https://github.com/ParasWadkar) — Tally form to HTML/PDF converter
+
+## License
+
+MIT
