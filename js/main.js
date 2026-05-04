@@ -28,6 +28,47 @@ function getSummary(problem) {
     return compactText.length > 140 ? `${compactText.slice(0, 137)}...` : compactText;
 }
 
+function createSkeletonCard() {
+    const card = document.createElement('div');
+    card.className = 'problem-card skeleton';
+    card.innerHTML = `
+        <div>
+            <div class="problem-card-header">
+                <h3 class="problem-title"><div class="skeleton-text large" style="width: 60%; margin-bottom: 0.5rem;"></div></h3>
+                <span class="skeleton-text" style="width: 60px; height: 28px;"></span>
+            </div>
+            <p class="problem-summary">
+                <div class="skeleton-text" style="width: 100%; margin-bottom: 0.5rem;"></div>
+                <div class="skeleton-text" style="width: 85%;"></div>
+            </p>
+            <div class="tag-list">
+                <div class="skeleton-text" style="width: 80px; height: 24px; border-radius: 4px;"></div>
+                <div class="skeleton-text" style="width: 70px; height: 24px; border-radius: 4px;"></div>
+                <div class="skeleton-text" style="width: 60px; height: 24px; border-radius: 4px;"></div>
+            </div>
+            <div class="skeleton-text" style="width: 40%; margin-top: 1rem;"></div>
+        </div>
+    `;
+    return card;
+}
+
+function showSkeletons() {
+    problemGrid.innerHTML = '';
+    for (let i = 0; i < 6; i++) {
+        problemGrid.appendChild(createSkeletonCard());
+    }
+}
+
+function showError(message, onRetry) {
+    problemGrid.innerHTML = `
+        <div class="error-message" style="grid-column: 1/-1;">
+            <p style="font-weight: 600; margin-bottom: 0.5rem;">⚠️ ${message}</p>
+            <p>The API may be waking up — please wait 30 seconds and refresh.</p>
+            <button onclick="location.reload()">Retry</button>
+        </div>
+    `;
+}
+
 function createProblemCard(problem) {
     const card = document.createElement('div');
     card.className = 'problem-card';
@@ -84,20 +125,26 @@ function createProblemCard(problem) {
 }
 
 async function displayProblems(query = "") {
-    problemGrid.innerHTML = '<div style="text-align: center; grid-column: 1/-1; color: var(--text-muted);">Searching...</div>';
+    // Show skeleton cards while loading
+    showSkeletons();
     
-    const problems = await api.fetchProblems(query);
-    
-    problemGrid.innerHTML = "";
-    
-    if (problems.length === 0) {
-        problemGrid.innerHTML = '<div style="text-align: center; grid-column: 1/-1; color: var(--text-muted);">No problems found.</div>';
-        return;
-    }
+    try {
+        const problems = await api.fetchProblems(query);
+        
+        problemGrid.innerHTML = "";
+        
+        if (problems.length === 0) {
+            problemGrid.innerHTML = '<div style="text-align: center; grid-column: 1/-1; color: var(--text-muted); padding: 3rem 1rem;">No problems found. Try a different search.</div>';
+            return;
+        }
 
-    problems.forEach(problem => {
-        problemGrid.appendChild(createProblemCard(problem));
-    });
+        problems.forEach(problem => {
+            problemGrid.appendChild(createProblemCard(problem));
+        });
+    } catch (error) {
+        console.error('Failed to fetch problems:', error);
+        showError("Couldn't load problems");
+    }
 }
 
 // Initialize

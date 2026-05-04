@@ -282,10 +282,25 @@ export default class TreeVisualizer {
             this.tree = buildTreeFromArray(arr);
         }
 
-        // Fallback tree if parsing fails
+        // If parsing failed, show error message
         if (!this.tree) {
-            const fallbackArr = [1, 2, 3, 4, 5, 6, 7];
-            this.tree = buildTreeFromArray(fallbackArr);
+            const errorMsg = document.createElement('div');
+            errorMsg.style.cssText = `
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+                color: var(--text-muted);
+                text-align: center;
+                padding: 2rem;
+            `;
+            errorMsg.innerHTML = '⚠️ Couldn\'t parse example input for this problem.';
+            this.container.appendChild(errorMsg);
+            
+            if (this.onUpdate) {
+                this.onUpdate('Error: Unable to parse problem example.');
+            }
+            return;
         }
 
         this.svg = d3.select(`#${containerId}`)

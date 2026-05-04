@@ -115,11 +115,37 @@ export default class ArrayVisualizer {
             ? 'two-sum'
             : detectArrayAlgorithm(this.problem, options);
 
+        let parsingFailed = false;
         if (this.problem && this.problem.content) {
             const parsedArray = parseExampleArray(this.problem.content);
             if (parsedArray.length > 0) {
                 this.data = parsedArray;
+            } else {
+                parsingFailed = true;
             }
+        } else {
+            parsingFailed = true;
+        }
+
+        // If parsing failed, show error message
+        if (parsingFailed) {
+            const errorMsg = document.createElement('div');
+            errorMsg.style.cssText = `
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+                color: var(--text-muted);
+                text-align: center;
+                padding: 2rem;
+            `;
+            errorMsg.innerHTML = '⚠️ Couldn\'t parse example input for this problem.';
+            this.container.appendChild(errorMsg);
+            
+            if (this.onUpdate) {
+                this.onUpdate('Error: Unable to parse problem example.');
+            }
+            return;
         }
 
         this.svg = d3.select(`#${containerId}`)
