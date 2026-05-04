@@ -1,5 +1,6 @@
 const API_BASE_URL = 'https://alfa-leetcode-api.onrender.com';
 const CACHE_PREFIX = 'algolens_';
+const PROBLEM_CACHE_PREFIX = 'algolens_problem_';
 const CACHE_TTL_MS = 60 * 60 * 1000;
 const DEFAULT_LIMIT = 20;
 const DEFAULT_SKIP = 0;
@@ -40,6 +41,10 @@ function setCachedData(cacheKey, data) {
     }));
 }
 
+function getProblemCacheKey(slug) {
+    return `${PROBLEM_CACHE_PREFIX}${slug}`;
+}
+
 function normalizeProblem(problem) {
     return {
         titleSlug: problem.titleSlug || '',
@@ -47,6 +52,16 @@ function normalizeProblem(problem) {
         difficulty: problem.difficulty || 'Unknown',
         topicTags: Array.isArray(problem.topicTags) ? problem.topicTags : [],
         content: problem.content || '',
+    };
+}
+
+function normalizeSelectedProblem(problem) {
+    return {
+        titleSlug: problem.titleSlug || '',
+        title: problem.questionTitle || problem.title || '',
+        difficulty: problem.difficulty || 'Unknown',
+        topicTags: Array.isArray(problem.topicTags) ? problem.topicTags : [],
+        content: problem.question || problem.content || '',
     };
 }
 
@@ -109,22 +124,37 @@ async function fetchProblemBySlug(slug) {
     }
 
     const normalizedSlug = slug.trim();
-    const cacheKey = buildCacheKey('problem', { titleSlug: normalizedSlug });
+    const cacheKey = getProblemCacheKey(normalizedSlug);
     const cachedData = getCachedData(cacheKey);
 
-    if (cachedData) {
+    if (cachedData && cachedData.content) {
         return cachedData;
     }
 
     try {
+        const selectedProblem = await fetchJson(`${API_BASE_URL}/select?titleSlug=${encodeURIComponent(normalizedSlug)}`);
+        const normalizedSelectedProblem = normalizeSelectedProblem(selectedProblem);
+
+        if (normalizedSelectedProblem.titleSlug) {
+            setCachedData(cacheKey, normalizedSelectedProblem);
+            return normalizedSelectedProblem;
+        }
+
         const data = await fetchJson(`${API_BASE_URL}/problems?titleSlug=${encodeURIComponent(normalizedSlug)}`);
         const [problem] = extractProblemList(data);
         if (problem) {
             setCachedData(cacheKey, problem);
+            return problem;
         }
-        return problem || null;
+
+        return null;
     } catch (error) {
         console.error('Error fetching problem:', error);
+
+        if (cachedData) {
+            return cachedData;
+        }
+
         return null;
     }
 }

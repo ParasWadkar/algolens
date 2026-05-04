@@ -1,13 +1,15 @@
+import api from './api.js';
 import detector from './detector.js';
 import theme from './theme.js';
 
 async function initVisualizer() {
     const params = new URLSearchParams(window.location.search);
     const title = params.get('title');
+    const slug = params.get('slug');
     const difficulty = params.get('difficulty');
     const tags = JSON.parse(params.get('tags') || '[]');
 
-    if (!title) {
+    if (!title || !slug) {
         window.location.href = 'index.html';
         return;
     }
@@ -20,11 +22,13 @@ async function initVisualizer() {
     const category = detector.detectCategory(tags);
     console.log(`Detected category: ${category}`);
 
+    await api.fetchProblemBySlug(slug);
+
     // Dynamic import of visualizer based on category
     try {
         const module = await import(`./visualizers/${category}.js`);
         const visualizer = new module.default();
-        visualizer.init('visualizer-canvas');
+        visualizer.init('visualizer-canvas', { slug, title, difficulty, tags });
         
         // Connect controls
         document.getElementById('btn-prev').onclick = () => visualizer.prev();
