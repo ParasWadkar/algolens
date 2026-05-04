@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="AlgoLens icon">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3fb0ff"/>
+      <stop offset="100%" stop-color="#176fd6"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="#0b1220"/>
+  <circle cx="24" cy="24" r="10" fill="none" stroke="url(#g)" stroke-width="4"/>
+  <path d="M32 32l12 12" stroke="#e6eef6" stroke-width="5" stroke-linecap="round"/>
+  <path d="M21 24h6" stroke="#3fb0ff" stroke-width="4" stroke-linecap="round"/>
+</svg>

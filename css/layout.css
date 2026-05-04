@@ -7,6 +7,54 @@
 .header {
     padding: 2rem 0;
     text-align: center;
+    background: var(--card-bg-soft);
+    border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+    backdrop-filter: blur(12px);
+}
+
+.header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.logo {
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--text-color);
+}
+
+.nav a {
+    margin-left: 1rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.nav a:hover {
+    color: var(--text-color);
+}
+
+.theme-toggle {
+    margin-left: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.theme-toggle svg {
+    width: 16px;
+    height: 16px;
+}
+
+.tagline {
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+}
+
+.problem-heading {
+    font-size: 1.1rem;
+    font-weight: 700;
 }
 
 .main-content {

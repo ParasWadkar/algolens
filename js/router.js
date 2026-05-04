@@ -1,4 +1,5 @@
 import detector from './detector.js';
+import theme from './theme.js';
 
 async function initVisualizer() {
     const params = new URLSearchParams(window.location.search);
@@ -62,4 +63,7 @@ async function initVisualizer() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', initVisualizer);
+document.addEventListener('DOMContentLoaded', () => {
+    theme.init();
+    initVisualizer();
+});

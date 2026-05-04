@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visualizer | AlgoLens</title>
+    <meta name="description" content="AlgoLens visualizer — step through algorithm states rendered with D3.js">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/components.css">
@@ -11,11 +16,20 @@
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
+    <a class="skip-link" href="#visualizer-canvas">Skip to visualizer</a>
     <header class="header" style="padding: 1rem 0;">
-        <div class="container" style="display: flex; align-items: center; justify-content: space-between;">
-            <a href="index.html" style="font-size: 1.5rem; font-weight: bold;">AlgoLens</a>
-            <h2 id="problem-title" style="font-size: 1.125rem;">Problem Title</h2>
-            <div id="problem-difficulty" class="badge">Easy</div>
+        <div class="container header-row" style="align-items: center; justify-content: space-between;">
+            <div style="display:flex; gap:1rem; align-items:center;">
+                <a class="logo" href="index.html">AlgoLens</a>
+                <a href="index.html" class="btn btn-primary">Back</a>
+            </div>
+            <h2 id="problem-title" class="problem-heading">Problem Title</h2>
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+                <div id="problem-difficulty" class="badge">Easy</div>
+                <button type="button" class="btn btn-ghost theme-toggle" data-theme-toggle aria-pressed="false">
+                    <span data-theme-label>Dark</span>
+                </button>
+            </div>
         </div>
     </header>
 

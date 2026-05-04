@@ -1,29 +1,43 @@
 import api from './api.js';
 import search from './search.js';
+import theme from './theme.js';
 
 const problemGrid = document.getElementById('problem-grid');
 
 function createProblemCard(problem) {
     const card = document.createElement('div');
     card.className = 'problem-card';
+    card.setAttribute('role', 'button');
+    card.setAttribute('aria-label', `Open visualizer for ${problem.title}`);
     card.dataset.title = problem.title;
     card.dataset.slug = problem.titleSlug;
     card.dataset.difficulty = problem.difficulty;
     card.dataset.tags = JSON.stringify(problem.topicTags);
 
+    const tagNames = problem.topicTags.map(tag => tag.name);
+    const primaryTags = tagNames.slice(0, 3);
+    const extraTags = Math.max(tagNames.length - primaryTags.length, 0);
+
     card.innerHTML = `
         <div>
-            <h3 class="problem-title">${problem.title}</h3>
-            <div class="problem-meta">
+            <div class="problem-card-header">
+                <h3 class="problem-title">${problem.title}</h3>
                 <span class="badge ${problem.difficulty.toLowerCase()}">${problem.difficulty}</span>
             </div>
+            <p class="problem-summary">Slug: ${problem.titleSlug}</p>
             <div class="tag-list">
-                ${problem.topicTags.slice(0, 3).map(tag => `<span class="tag">${tag.name}</span>`).join('')}
-                ${problem.topicTags.length > 3 ? `<span class="tag">+${problem.topicTags.length - 3}</span>` : ''}
+                ${primaryTags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                ${extraTags > 0 ? `<span class="tag">+${extraTags}</span>` : ''}
             </div>
+            <span class="problem-link">
+                Open visualizer
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </span>
         </div>
     `;
 
+    // Make card keyboard-focusable and actionable
+    card.tabIndex = 0;
     card.addEventListener('click', () => {
         const params = new URLSearchParams({
             title: problem.title,
@@ -32,6 +46,13 @@ function createProblemCard(problem) {
             tags: JSON.stringify(problem.topicTags)
         });
         window.location.href = `visualizer.html?${params.toString()}`;
+    });
+
+    card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            card.click();
+        }
     });
 
     return card;
@@ -56,6 +77,7 @@ async function displayProblems(query = "") {
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
+    theme.init();
     displayProblems();
     search.init(displayProblems);
 });

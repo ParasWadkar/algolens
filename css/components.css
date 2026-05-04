@@ -39,6 +39,42 @@
     border-color: var(--primary);
 }
 
+.problem-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.problem-summary {
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    margin-bottom: 1rem;
+}
+
+.problem-link {
+    margin-top: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.problem-link svg {
+    width: 14px;
+    height: 14px;
+}
+
+.problem-card:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(2,6,23,0.6);
+    border-color: var(--primary);
+    outline: none;
+}
+
 .problem-title {
     font-size: 1.25rem;
     font-weight: 600;
@@ -78,6 +114,14 @@
     border-radius: 4px;
 }
 
+/* Buttons refinement */
+.btn {
+    padding: 0.45rem 0.75rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
 /* Buttons */
 .btn {
     padding: 0.5rem 1rem;
@@ -93,4 +137,15 @@
 
 .btn-primary:hover {
     background: var(--primary-hover);
+}
+
+.btn-ghost {
+    background: transparent;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+.btn-ghost:hover {
+    border-color: var(--primary);
+    color: var(--primary);
 }

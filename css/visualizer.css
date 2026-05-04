@@ -1,8 +1,8 @@
 .visualizer-container {
     display: grid;
-    grid-template-columns: 1fr 350px;
+    grid-template-columns: 1fr 340px;
     gap: 1.5rem;
-    height: calc(100vh - 150px);
+    min-height: calc(100vh - 160px);
 }
 
 .canvas-area {
@@ -29,6 +29,17 @@
 .description-card {
     flex-grow: 1;
     overflow-y: auto;
+}
+
+/* Keep side panel controls visible on large screens */
+@media (min-width: 1025px) {
+    .side-panel {
+        position: relative;
+    }
+    .controls-card {
+        position: sticky;
+        top: 1.5rem;
+    }
 }
 
 .controls {

@@ -4,20 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AlgoLens | DSA Visualizer</title>
+    <meta name="description" content="AlgoLens — interactive data-structure & algorithm visualizer for studying LeetCode problems">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/components.css">
 </head>
 <body>
+    <a class="skip-link" href="#problem-search">Skip to search</a>
     <header class="header">
         <div class="container">
-            <h1>AlgoLens</h1>
-            <p style="color: var(--text-muted);">Visualize LeetCode problems step-by-step</p>
+            <div class="header-row">
+                <a class="logo" href="index.html">AlgoLens</a>
+                <nav class="nav">
+                    <a href="index.html">Home</a>
+                    <a href="visualizer.html">Visualizer</a>
+                    <button type="button" class="btn btn-ghost theme-toggle" data-theme-toggle aria-pressed="false">
+                        <span data-theme-label>Dark</span>
+                    </button>
+                </nav>
+            </div>
+            <p class="tagline">Visualize LeetCode problems step-by-step</p>
         </div>
     </header>
 
     <main class="main-content container">
         <div class="search-container">
+            <label for="problem-search" class="visually-hidden">Search problems</label>
             <input type="text" id="problem-search" class="search-input" placeholder="Search by name, tag, or difficulty (e.g. Two Sum, Array, Easy)...">
         </div>
 
