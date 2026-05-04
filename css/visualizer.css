@@ -1,0 +1,87 @@
+.visualizer-container {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 1.5rem;
+    height: calc(100vh - 150px);
+}
+
+.canvas-area {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.side-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.controls-card, .description-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 1rem;
+    padding: 1.5rem;
+}
+
+.description-card {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.control-btn {
+    background: var(--border-color);
+    color: var(--text-color);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.control-btn:hover {
+    background: var(--text-muted);
+}
+
+.control-btn.active {
+    background: var(--primary);
+}
+
+.speed-control {
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.step-description {
+    font-size: 0.9375rem;
+    color: var(--text-muted);
+}
+
+.step-description strong {
+    color: var(--text-color);
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+@media (max-width: 1024px) {
+    .visualizer-container {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+    
+    .canvas-area {
+        height: 400px;
+    }
+}

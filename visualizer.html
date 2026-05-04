@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizer | AlgoLens</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/visualizer.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <header class="header" style="padding: 1rem 0;">
+        <div class="container" style="display: flex; align-items: center; justify-content: space-between;">
+            <a href="index.html" style="font-size: 1.5rem; font-weight: bold;">AlgoLens</a>
+            <h2 id="problem-title" style="font-size: 1.125rem;">Problem Title</h2>
+            <div id="problem-difficulty" class="badge">Easy</div>
+        </div>
+    </header>
+
+    <main class="main-content container">
+        <div class="visualizer-container">
+            <div class="canvas-area" id="visualizer-canvas">
+                <!-- D3.js will render here -->
+            </div>
+
+            <aside class="side-panel">
+                <div class="controls-card">
+                    <h3>Controls</h3>
+                    <div class="controls">
+                        <button id="btn-prev" class="control-btn" title="Previous Step">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+                        </button>
+                        <button id="btn-play-pause" class="control-btn" title="Play/Pause">
+                            <svg id="play-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3l14 9-14 9V3z"/></svg>
+                            <svg id="pause-icon" style="display: none;" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                        </button>
+                        <button id="btn-next" class="control-btn" title="Next Step">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                        </button>
+                    </div>
+                    <div style="margin-top: 1.5rem;">
+                        <label style="font-size: 0.875rem; color: var(--text-muted);">Speed</label>
+                        <input type="range" id="speed-slider" class="speed-control" min="100" max="2000" step="100" value="1000">
+                    </div>
+                </div>
+
+                <div class="description-card">
+                    <h3>Step Description</h3>
+                    <div id="step-info" class="step-description">
+                        <p>Loading algorithm steps...</p>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <script type="module" src="js/router.js"></script>
+</body>
+</html>

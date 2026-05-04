@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlgoLens | DSA Visualizer</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>AlgoLens</h1>
+            <p style="color: var(--text-muted);">Visualize LeetCode problems step-by-step</p>
+        </div>
+    </header>
+
+    <main class="main-content container">
+        <div class="search-container">
+            <input type="text" id="problem-search" class="search-input" placeholder="Search by name, tag, or difficulty (e.g. Two Sum, Array, Easy)...">
+        </div>
+
+        <div id="problem-grid" class="grid">
+            <!-- Problem cards will be injected here -->
+            <div class="loading" style="text-align: center; grid-column: 1/-1; color: var(--text-muted);">
+                Loading problems...
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 AlgoLens. Built with D3.js</p>
+        </div>
+    </footer>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
