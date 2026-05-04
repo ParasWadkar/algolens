@@ -1,19 +1,54 @@
+function normalizeTagName(tag) {
+    return String(tag || '')
+        .toLowerCase()
+        .replace(/[_\s]+/g, '-');
+}
+
 const detector = {
     detectCategory(tags) {
-        const tagNames = tags.map(tag => tag.name.toLowerCase());
+        const tagNames = tags.map(tag => {
+            const name = tag.name || tag.slug || '';
+            return normalizeTagName(name);
+        });
         
-        if (tagNames.some(t => t.includes('array') || t.includes('sort') || t.includes('sliding window'))) {
-            return 'array';
-        }
-        if (tagNames.some(t => t.includes('tree') || t.includes('binary search tree') || t.includes('trie'))) {
+        // Tree detection (binary tree, BST, tree traversal)
+        if (tagNames.some(t => 
+            t.includes('tree') || 
+            t.includes('bst') || 
+            t.includes('binary-search-tree') ||
+            t.includes('trie')
+        )) {
             return 'tree';
         }
-        if (tagNames.some(t => t.includes('graph') || t.includes('shortest path') || t.includes('topological sort'))) {
+        
+        // Array detection
+        if (tagNames.some(t => 
+            t.includes('array') || 
+            t.includes('sort') || 
+            t.includes('sliding-window') ||
+            t.includes('two-pointers') ||
+            t.includes('binary-search')
+        )) {
+            return 'array';
+        }
+        
+        // Graph detection
+        if (tagNames.some(t => 
+            t.includes('graph') || 
+            t.includes('shortest-path') || 
+            t.includes('topological-sort') ||
+            t.includes('dfs') ||
+            t.includes('bfs')
+        )) {
             return 'graph';
         }
-        if (tagNames.some(t => t.includes('linked list'))) {
+        
+        // Linked list detection
+        if (tagNames.some(t => t.includes('linked-list'))) {
             return 'linkedlist';
         }
+        
+        // Matrix detection
         if (tagNames.some(t => t.includes('matrix') || t.includes('grid'))) {
             return 'matrix';
         }
