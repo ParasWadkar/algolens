@@ -3,17 +3,19 @@
     max-width: 600px;
     margin: 0 auto 3rem;
     position: relative;
+    padding: 0 1rem;
 }
 
 .search-input {
     width: 100%;
-    padding: 1rem 1.5rem;
+    padding: clamp(0.75rem, 3vw, 1rem) clamp(1rem, 4vw, 1.5rem);
     background: var(--card-bg);
     border: 1px solid var(--border-color);
     border-radius: 0.75rem;
     color: var(--text-color);
-    font-size: 1rem;
+    font-size: clamp(14px, 2.5vw, 16px);
     transition: border-color 0.2s;
+    min-height: 44px;
 }
 
 .search-input:focus {
@@ -21,12 +23,19 @@
     outline: none;
 }
 
+@media (max-width: 640px) {
+    .search-container {
+        margin: 0 0 2rem 0;
+        padding: 0;
+    }
+}
+
 /* Problem Card */
 .problem-card {
     background: var(--card-bg);
     border: 1px solid var(--border-color);
     border-radius: 1rem;
-    padding: 1.5rem;
+    padding: clamp(1rem, 4vw, 1.5rem);
     transition: transform 0.2s, border-color 0.2s;
     display: flex;
     flex-direction: column;
@@ -43,13 +52,14 @@
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    gap: 1rem;
+    gap: clamp(0.5rem, 2vw, 1rem);
     margin-bottom: 0.75rem;
+    flex-wrap: wrap;
 }
 
 .problem-summary {
     color: var(--text-muted);
-    font-size: 0.92rem;
+    font-size: clamp(0.85rem, 2vw, 0.92rem);
     margin-bottom: 1rem;
 }
 
@@ -60,7 +70,7 @@
     gap: 0.4rem;
     color: var(--primary);
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
 }
 
 .problem-link svg {
@@ -76,7 +86,7 @@
 }
 
 .problem-title {
-    font-size: 1.25rem;
+    font-size: clamp(1.05rem, 3vw, 1.25rem);
     font-weight: 600;
     margin-bottom: 0.5rem;
 }
@@ -89,11 +99,12 @@
 }
 
 .badge {
-    padding: 0.25rem 0.75rem;
+    padding: 0.25rem clamp(0.5rem, 1vw, 0.75rem);
     border-radius: 9999px;
-    font-size: 0.75rem;
+    font-size: clamp(0.65rem, 1.5vw, 0.75rem);
     font-weight: 600;
     text-transform: uppercase;
+    white-space: nowrap;
 }
 
 .badge.easy { background: rgba(34, 197, 94, 0.1); color: var(--easy); }
@@ -103,23 +114,30 @@
 .tag-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: clamp(0.3rem, 1vw, 0.5rem);
 }
 
 .tag {
-    font-size: 0.75rem;
+    font-size: clamp(0.65rem, 1.5vw, 0.75rem);
     color: var(--text-muted);
     background: rgba(148, 163, 184, 0.1);
-    padding: 0.125rem 0.5rem;
+    padding: clamp(0.1rem, 0.5vw, 0.125rem) clamp(0.35rem, 1vw, 0.5rem);
     border-radius: 4px;
+    white-space: nowrap;
 }
 
 /* Buttons refinement */
 .btn {
-    padding: 0.45rem 0.75rem;
+    padding: clamp(0.4rem, 2vw, 0.5rem) clamp(0.6rem, 3vw, 1rem);
     border-radius: 0.5rem;
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
 }
 
 /* Buttons */
@@ -148,4 +166,11 @@
 .btn-ghost:hover {
     border-color: var(--primary);
     color: var(--primary);
+}
+
+@media (max-width: 375px) {
+    .btn {
+        padding: 0.4rem 0.6rem;
+        font-size: clamp(0.75rem, 1.8vw, 0.85rem);
+    }
 }

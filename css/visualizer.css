@@ -23,7 +23,7 @@
     background: var(--card-bg);
     border: 1px solid var(--border-color);
     border-radius: 1rem;
-    padding: 1.5rem;
+    padding: clamp(1rem, 4vw, 1.5rem);
 }
 
 .description-card {
@@ -46,20 +46,22 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 1rem;
+    gap: clamp(0.75rem, 2vw, 1rem);
     margin-top: 1rem;
+    flex-wrap: wrap;
 }
 
 .control-btn {
     background: var(--border-color);
     color: var(--text-color);
-    width: 40px;
-    height: 40px;
+    width: clamp(44px, 10vw, 50px);
+    height: clamp(44px, 10vw, 50px);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: background 0.2s;
+    flex-shrink: 0;
 }
 
 .control-btn:hover {
@@ -73,10 +75,56 @@
 .speed-control {
     width: 100%;
     margin-top: 1rem;
+    cursor: pointer;
+    accent-color: var(--primary);
+    height: 6px;
+}
+
+/* Ensure slider thumb is easily touchable */
+.speed-control {
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.speed-control::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--primary);
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.speed-control::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--primary);
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 640px) {
+    .speed-control {
+        height: 8px;
+    }
+    
+    .speed-control::-webkit-slider-thumb {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .speed-control::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+    }
 }
 
 .step-description {
-    font-size: 0.9375rem;
+    font-size: clamp(0.85rem, 2vw, 0.9375rem);
     color: var(--text-muted);
 }
 
@@ -86,13 +134,56 @@
     margin-bottom: 0.5rem;
 }
 
+/* Tablet: stack vertically, canvas takes more vertical space */
 @media (max-width: 1024px) {
     .visualizer-container {
         grid-template-columns: 1fr;
         height: auto;
+        gap: clamp(1rem, 3vw, 1.5rem);
     }
     
     .canvas-area {
-        height: 400px;
+        height: clamp(300px, 50vh, 500px);
+    }
+}
+
+/* Mobile: full responsive stacking with optimized heights */
+@media (max-width: 640px) {
+    .visualizer-container {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        min-height: auto;
+    }
+    
+    .canvas-area {
+        height: clamp(280px, 40vh, 350px);
+    }
+    
+    .controls-card, .description-card {
+        padding: clamp(1rem, 3vw, 1.5rem);
+    }
+    
+    .controls {
+        gap: 0.5rem;
+    }
+    
+    .control-btn {
+        width: 44px;
+        height: 44px;
+    }
+    
+    .side-panel {
+        gap: 1rem;
+    }
+}
+
+/* Very small screens (under 375px) */
+@media (max-width: 374px) {
+    .canvas-area {
+        height: clamp(250px, 35vh, 300px);
+    }
+    
+    .controls {
+        gap: 0.25rem;
     }
 }

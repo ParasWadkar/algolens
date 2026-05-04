@@ -38,6 +38,26 @@ body {
     font-family: var(--font-family);
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+    font-size: clamp(14px, 2vw, 16px);
+}
+
+/* Ensure minimum touch target size (WCAG AA) */
+button, a[role="button"], .control-btn, input[type="button"], input[type="submit"] {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Prevent horizontal scrolling on any viewport */
+html {
+    overflow-x: hidden;
+}
+
+body {
+    overflow-x: hidden;
+    width: 100%;
 }
 
 /* Utility: visually hidden (for accessible labels) */

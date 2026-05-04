@@ -1,11 +1,11 @@
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 1.5rem;
+    padding: 0 clamp(1rem, 5vw, 1.5rem);
 }
 
 .header {
-    padding: 2rem 0;
+    padding: clamp(1rem, 4vw, 2rem) 0;
     text-align: center;
     background: var(--card-bg-soft);
     border-bottom: 1px solid rgba(148, 163, 184, 0.14);
@@ -16,13 +16,16 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1rem;
+    gap: clamp(0.5rem, 2vw, 1rem);
+    flex-wrap: nowrap;
 }
 
 .logo {
     font-weight: 700;
-    font-size: 1.25rem;
+    font-size: clamp(1rem, 4vw, 1.25rem);
     color: var(--text-color);
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .nav a {
@@ -36,10 +39,13 @@
 }
 
 .theme-toggle {
-    margin-left: 1rem;
+    margin-left: clamp(0.5rem, 2vw, 1rem);
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
+    flex-shrink: 0;
+    min-height: 44px;
+    min-width: 44px;
 }
 
 .theme-toggle svg {
@@ -50,32 +56,67 @@
 .tagline {
     color: var(--text-muted);
     margin-top: 0.5rem;
+    font-size: clamp(0.8rem, 2vw, 0.9rem);
 }
 
 .problem-heading {
-    font-size: 1.1rem;
+    font-size: clamp(1rem, 3vw, 1.1rem);
     font-weight: 700;
 }
 
 .main-content {
-    padding: 2rem 0;
+    padding: clamp(1rem, 5vw, 2rem) 0;
 }
 
+/* Responsive grid: 3 cols desktop, 2 cols tablet, 1 col mobile */
 .grid {
     display: grid;
-    gap: 1.5rem;
+    gap: clamp(1rem, 3vw, 1.5rem);
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+@media (max-width: 1024px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .container {
+        padding: 0 clamp(1rem, 4vw, 1rem);
+    }
+    
+    .grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .header-row {
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .logo {
+        font-size: clamp(0.9rem, 3.5vw, 1rem);
+    }
+    
+    .problem-heading {
+        min-width: 100%;
+        order: 3;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+}
+
+@media (max-width: 374px) {
+    .problem-heading {
+        font-size: clamp(0.85rem, 3vw, 0.95rem);
+    }
 }
 
 footer {
     padding: 2rem 0;
     text-align: center;
     color: var(--text-muted);
-    font-size: 0.875rem;
-}
-
-@media (max-width: 640px) {
-    .container {
-        padding: 0 1rem;
-    }
+    font-size: clamp(0.75rem, 2vw, 0.875rem);
 }
